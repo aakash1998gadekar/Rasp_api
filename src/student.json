@@ -1,0 +1,138 @@
+{
+    "resource" : "student",
+    "table" : true,
+    "tile" : false,
+    "display_name" : "Student",
+    "menu_context" : "setup",
+    "page_name" : {
+        "list" : "student",
+        "add" : "student",
+        "edit" : "student",
+        "view" : "student"
+    },
+    "add_required" : true,
+    "modify_required" : true,
+    "delete_required" : true,
+    "login_required" : false,
+    "list" : {
+        "fields":[
+            {
+                "heading":"Name",
+                "type":"STRING",
+                "order":2,
+                "sortable":true,
+                "name":"name"
+            },
+            {
+                "heading":"Roll No",
+                "type":"STRING",
+                "order":1,
+                "sortable":true,
+                "name":"roll_no"
+            },
+            {
+                "heading":"Email Id",
+                "type":"STRING",
+                "order":3,
+                "sortable":true,
+                "name":"email_id"
+            },
+            {
+                "heading":"Phone No.",
+                "type":"STRING",
+                "order":4,
+                "sortable":true,
+                "name":"phone_no"
+            },
+            {
+                "heading":"Gender",
+                "type":"STRING",
+                "order":4,
+                "sortable":true,
+                "name":"gender"
+            },
+            {
+                "heading":"In/Out Status",
+                "type":"STRING",
+                "order":1,
+                "sortable":true,
+                "name":"current_in_status"
+            },
+            {
+                "heading":"Batch",
+                "type":"STRING",
+                "order":5,
+                "sortable":true,
+                "name":"batch_id"
+            }
+        ]
+    },
+    "form" : {
+            "blocks": [
+                {
+                    "name":"basic_configuration",
+                    "order":1,
+                    "fields":[
+                        {
+                            "label":"Name",
+                            "order":2,
+                            "type":"STRING",
+                            "required":true,
+                            "component":"textbox",
+                            "name":"name"
+                        },
+                        {
+                            "label":"Roll No",
+                            "order":1,
+                            "type":"STRING",
+                            "required":true,
+                            "component":"textbox",
+                            "name":"roll_no"
+                        },
+                        {
+                            "label":"Email Id",
+                            "order":3,
+                            "type":"STRING",
+                            "required":true,
+                            "component":"textbox",
+                            "name":"email_id"
+                        },
+                        {
+                            "label":"Phone No",
+                            "order":4,
+                            "type":"STRING",
+                            "required":true,
+                            "component":"textbox",
+                            "name":"phone_no"
+                        },
+                        {
+                            "label":"Gender",
+                            "order":4,
+                            "type":"STRING",
+                            "required":true,
+                            "component":"textbox",
+                            "name":"gender"
+                        },
+                        {
+                            "label":"Batch",
+                            "foreign_resource":"batch",
+                            "class_name":"col-sm-6 fix",
+                            "order":5,
+                            "type":"STRING",
+                            "required":true,
+                            "hint":"Select",
+                            "component":"dropdown",
+                            "datasource":{
+                                "application":"null",
+                                "resource":"batch",
+                                "query_id":"GET_ALL",
+                                "key":"id"
+                            },
+                            "name":"batch_id"
+                        }
+                    ],
+                    "title":"Configuration"
+                }
+            ]
+    }
+}
