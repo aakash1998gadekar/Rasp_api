@@ -127,16 +127,47 @@ console.log(`Base Encoding of adding batch: ${base64Encoded}`);
   }
 };
 
+// export const updateOrDeleteStudent = async (studentId, newData, action) => {
+//   try {
+//     const params = new URLSearchParams();
+//     params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+//     params.append("action", action); // Set the action based on input
+
+//     // If action is DELETE, encode the student ID to base64 and set it as resource
+//     // If action is MODIFY, encode the new data to base64 and set it as resource
+//     const base64EncodedData = action === "DELETE" ? btoa(studentId) : btoa(JSON.stringify(newData));
+
+//     params.append("resource", base64EncodedData);
+
+//     const response = await fetch(`api/student?${params.toString()}`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/x-www-form-urlencoded",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`Failed to ${action === "DELETE" ? "delete" : "update"} student.`);
+//     }
+
+//     // Optionally, you can handle the response according to your requirements
+//   } catch (error) {
+//     console.error(`Error ${action === "DELETE" ? "deleting" : "updating"} student:`, error);
+//     throw error;
+//   }
+// };
+
 export const updateOrDeleteStudent = async (studentId, newData, action) => {
   try {
     const params = new URLSearchParams();
     params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
     params.append("action", action); // Set the action based on input
+    console.log("Student ID:", studentId);
 
     // If action is DELETE, encode the student ID to base64 and set it as resource
     // If action is MODIFY, encode the new data to base64 and set it as resource
-    const base64EncodedData = action === "DELETE" ? btoa(studentId) : btoa(JSON.stringify(newData));
-
+    const base64EncodedData = action === "DELETE" ? btoa(JSON.stringify({"id":studentId})) : btoa(JSON.stringify(newData));
+    console.log("Delete data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
     const response = await fetch(`api/student?${params.toString()}`, {
@@ -146,7 +177,7 @@ export const updateOrDeleteStudent = async (studentId, newData, action) => {
       },
     });
 
-    if (!response.ok) {
+    if (!response.errCode) {
       throw new Error(`Failed to ${action === "DELETE" ? "delete" : "update"} student.`);
     }
 
@@ -157,13 +188,14 @@ export const updateOrDeleteStudent = async (studentId, newData, action) => {
   }
 };
 
-export const deleteOneStudent = async (studentId) => {
+
+export const deleteOneStudent = async (studentData) => {
   try {
     const params = new URLSearchParams();
     params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
     params.append("action", "DELETE"); // Indicate the action as DELETE
  
-    const base64EncodedId = btoa(studentId); // Encode the student ID to base64
+    const base64EncodedId = btoa({"id":studentData.id}); // Encode the student ID to base64
  
     params.append("resource", base64EncodedId); // Set the resource parameter to the encoded ID
  
@@ -174,9 +206,13 @@ export const deleteOneStudent = async (studentId) => {
       },
     });
  
-    if (!response.ok) {
-      throw new Error("Failed to delete student.");
+    if (response.errCode) {
+      throw new Error("Failed to delete student or entity doesn't exists.");
     }
+    else{
+      return (`Deleted student id: ${response.resource.id}`)
+    }
+    
  
     // Optionally, you can handle the response according to your requirements
   } catch (error) {
